@@ -8,6 +8,10 @@
   <body>
     <h1>Login Page</h1>
 
+    <% if (error_msg.length > 0) { %>
+    <div class="alert alert-danger"><%= error_msg %></div>
+    <% } %>
+
     <!-- Log In form -->
     <form action="/login" method="POST">
       <div>

@@ -12,13 +12,34 @@ model User {
   email    String @unique
   password String
 
-  Session Session[]
+  File   File[]
+  Folder Folder[]
+}
+
+model File {
+  id           Int      @id @default(autoincrement())
+  originalname String
+  size         BigInt
+  uploadTime   DateTime @default(now())
+  type         String
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  folderId     Int?
+  folder       Folder?  @relation(fields: [folderId], references: [id])
+}
+
+model Folder {
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+
+  files File[]
 }
 
 model Session {
-  id           String   @id @default(uuid())
-  userId       Int
-  expires      DateTime
-  sessionToken String   @unique
-  user         User     @relation(fields: [userId], references: [id])
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
 }

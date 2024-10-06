@@ -16,34 +16,21 @@ exports.signUp = async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  try {
-    await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
-    res.redirect("/login");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("server Error");
-  }
+  await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+    },
+  });
+
+  res.redirect("/login");
 };
 
-exports.logIn = (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return next(err); // Pass errors to the next middleware
-    }
-    if (!user) {
-      return res.redirect("/login"); // Redirect back to login if authentication fails
-    }
-    req.logIn(user, (err) => {
-      if (err) {
-        return next(err); // Pass errors to the next middleware
-      }
-      return res.redirect("/"); // Redirect to home page on successful login
-    });
+exports.login = (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
   })(req, res, next);
 };
 
@@ -54,9 +41,9 @@ exports.isAuthenticated = (req, res, next) => {
   res.redirect("/login");
 };
 
-const redirectIfAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect("/");
+exports.isNotAuthenticated = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return next();
   }
-  next();
+  res.redirect("/");
 };
