@@ -1,37 +1,37 @@
 const bcrypt = require("bcryptjs");
-const { PrismaClient } = require("@prisma/client");
+const prisma = require("../db/prismaClient");
 const passport = require("passport");
-const prisma = new PrismaClient();
 
-exports.sigUpPage = (req, res) => {
-  res.render("signup");
+exports.signup = async (req, res) => {
+  const { email, password, firstName, lastName } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name: `${firstName} ${lastName}`,
+      },
+    });
+    res.redirect("/login");
+  } catch (error) {
+    res.status(500).send("Error signing up");
+  }
 };
 
-exports.logInPage = (req, res) => {
-  res.render("login");
-};
+exports.login = passport.authenticate("local", {
+  successRedirect: "/file-uploader",
+  failureRedirect: "/login",
+  failureFlash: true,
+});
 
-exports.signUp = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-    },
+exports.logout = (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).send("Error logging out");
+    }
+    res.redirect("/");
   });
-
-  res.redirect("/login");
-};
-
-exports.login = (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })(req, res, next);
 };
 
 exports.isAuthenticated = (req, res, next) => {
@@ -39,11 +39,4 @@ exports.isAuthenticated = (req, res, next) => {
     return next();
   }
   res.redirect("/login");
-};
-
-exports.isNotAuthenticated = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/");
 };

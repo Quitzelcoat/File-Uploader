@@ -5,30 +5,22 @@ const prisma = new PrismaClient();
 
 const localStrategy = new LocalStrategy(async (username, password, done) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: username },
-    });
-
+    const user = await prisma.user.findUnique({ where: { email: username } });
     if (!user) {
-      return done(null, false, { message: "User not found" });
+      return done(null, false, { message: "Incorrect email." });
     }
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if (!isValidPassword) {
-      return done(null, false, { message: "Incorrect password" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return done(null, false, { message: "Incorrect password." });
     }
-
     return done(null, user);
   } catch (err) {
     return done(err);
-  } finally {
-    await prisma.$disconnect();
   }
 });
 
 const serialize = (user, done) => {
-  return done(null, user.id);
+  done(null, user.id);
 };
 
 const deserialize = async (id, done) => {
@@ -36,11 +28,9 @@ const deserialize = async (id, done) => {
     const user = await prisma.user.findUnique({
       where: { id },
     });
-    return done(null, user);
+    done(null, user);
   } catch (err) {
-    return done(err);
-  } finally {
-    await prisma.$disconnect;
+    done(err);
   }
 };
 
