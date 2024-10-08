@@ -7,12 +7,12 @@ router.get("/", authController.isAuthenticated, (req, res) => {
   res.render("main");
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", authController.isNotAuthenticated, (req, res) => {
   res.render("login");
 });
 router.post("/login", authController.login);
 
-router.get("/signup", (req, res) => {
+router.get("/signup", authController.isNotAuthenticated, (req, res) => {
   res.render("signup");
 });
 router.post("/signup", authController.signup);

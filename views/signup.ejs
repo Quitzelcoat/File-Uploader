@@ -8,6 +8,10 @@
   <body>
     <h1>Sign Up Page</h1>
 
+    <% if (error_msg) { %>
+    <p style="color: red"><%= error_msg %></p>
+    <% } %>
+
     <!-- Log In form -->
     <form action="/signup" method="POST">
       <div>
@@ -17,7 +21,7 @@
 
       <div>
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastname" name="lastname" required />
+        <input type="text" id="lastName" name="lastName" required />
       </div>
 
       <div>

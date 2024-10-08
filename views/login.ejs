@@ -8,6 +8,10 @@
   <body>
     <h1>Login Page</h1>
 
+    <% if (error_msg) { %>
+    <p style="color: red"><%= error_msg %></p>
+    <% } %>
+
     <!-- Log In form -->
     <form action="/login" method="POST">
       <div>
