@@ -4,7 +4,7 @@ const passport = require("passport");
 
 exports.signup = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
-  console.log("Request Body:", req.body);
+  // console.log("Request Body:", req.body);
 
   if (!firstName || !lastName || !email || !password) {
     return res.status(400).send("All fields are required");

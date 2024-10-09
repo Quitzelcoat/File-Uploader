@@ -2,11 +2,13 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
-const prisma = require("./db/prismaClient");
 const flash = require("connect-flash");
 const passport = require("passport");
+
+const prisma = require("./db/prismaClient");
 require("./config/passport");
 const authRouter = require("./routes/authRouter");
+const uploadRoutes = require("./routes/uploadRoutes");
 const { localStrategy, serialize, deserialize } = require("./config/passport");
 
 const app = express();
@@ -29,12 +31,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log("Session:", req.session);
-  console.log("User:", req.user);
-  next();
-});
-
 passport.use(localStrategy);
 passport.serializeUser(serialize);
 passport.deserializeUser(deserialize);
@@ -56,7 +52,10 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use("/uploads", express.static("uploads"));
+
 app.use(authRouter);
+app.use(uploadRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
