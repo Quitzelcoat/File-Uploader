@@ -21,6 +21,7 @@ model User {
 model File {
   id           Int      @id @default(autoincrement())
   originalname String
+  path         String
   size         BigInt
   uploadTime   DateTime @default(now())
   type         String

@@ -9,6 +9,7 @@ const prisma = require("./db/prismaClient");
 require("./config/passport");
 const authRouter = require("./routes/authRouter");
 const uploadRoutes = require("./routes/uploadRoutes");
+const folderRouter = require("./routes/folderRouter");
 const { localStrategy, serialize, deserialize } = require("./config/passport");
 
 const app = express();
@@ -56,6 +57,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use(authRouter);
 app.use(uploadRoutes);
+app.use(folderRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>

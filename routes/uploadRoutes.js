@@ -8,9 +8,9 @@ router.get("/upload", authController.isAuthenticated, (req, res) => {
 });
 
 router.post(
-  "/upload",
+  "/upload/:folderId",
   authController.isAuthenticated,
-  uploadsControllers.upload.single("file"),
+  uploadsControllers.uploadFile,
   (req, res) => {
     if (!req.file) {
       req.flash("error_msg", "No file uploaded");

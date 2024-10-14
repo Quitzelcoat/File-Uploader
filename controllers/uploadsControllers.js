@@ -1,16 +1,32 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    console.log("User ID: ", req.user?.id);
+    console.log("Folder ID: ", req.params.folderId);
+
+    if (!req.user?.id || (!req.body?.folderId && req.body?.folderId !== "")) {
+      return cb(new Error("Invalid path parameters"));
+    }
+
+    const folderPath = path.join(
+      __dirname,
+      "../uploads",
+      `${req.user.id}`,
+      req.params.folderId
+    );
+
+    fs.mkdirSync(folderPath, { recursive: true });
+    cb(null, folderPath);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
-exports.upload = multer({
+const upload = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 }, // Limit file size to 5MB
   fileFilter: (req, file, cb) => {
@@ -27,3 +43,5 @@ exports.upload = multer({
     }
   },
 });
+
+exports.uploadFile = upload.single("file");
