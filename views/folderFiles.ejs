@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Folder: <%= folder.name %></title>
+  </head>
+  <body>
+    <h1>Files in Folder: <%= folder.name %></h1>
+
+    <% if (folder.files.length > 0) { %>
+    <ul>
+      <% folder.files.forEach(file => { %>
+      <li>
+        <a href="/folders/file/<%= file.id %>"><%= file.originalname %></a>
+        (Size: <%= file.size %> bytes)
+        <a
+          href="/folders/files/download/<%= file.id %>"
+          style="margin-left: 10px"
+          >Download</a
+        >
+      </li>
+      <% }) %>
+    </ul>
+    <% } else { %>
+    <p>No files found in this folder.</p>
+    <% } %>
+
+    <a href="/">Back to Home</a>
+  </body>
+</html>

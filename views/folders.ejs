@@ -1,45 +1,55 @@
-<h1>Your Folders</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+  </head>
+  <body>
+    <h1>Your Folders</h1>
 
-<form action="/folders/create" method="POST">
-  <input type="text" name="name" placeholder="Folder Name" required />
-  <button type="submit">Create Folder</button>
-</form>
-
-<ul>
-  <% folders.forEach(folder => { %>
-  <li>
-    <h2><%= folder.name %></h2>
-    <form action="/folders/update" method="POST">
-      <input type="hidden" name="folderId" value="<%= folder.id %>" />
-      <input type="text" name="newName" placeholder="Rename Folder" required />
-      <button type="submit">Rename</button>
+    <form action="/folders/create" method="POST">
+      <input type="text" name="name" placeholder="Folder Name" required />
+      <button type="submit">Create Folder</button>
     </form>
-    <a href="/folders/delete/<%= folder.id %>">Delete Folder</a>
 
-    <h3>Files in this folder:</h3>
     <ul>
-      <% folder.files.forEach(file => { %>
-      <li><%= file.originalname %></li>
+      <% folders.forEach(folder => { %>
+      <li>
+        <h2>
+          <a href="/folders/<%= folder.id %>/files"><%= folder.name %></a>
+        </h2>
+        <form action="/folders/update" method="POST">
+          <input type="hidden" name="folderId" value="<%= folder.id %>" />
+          <input
+            type="text"
+            name="newName"
+            placeholder="Rename Folder"
+            required
+          />
+          <button type="submit">Rename</button>
+        </form>
+        <a href="/folders/delete/<%= folder.id %>">Delete Folder</a>
+      </li>
       <% }); %>
     </ul>
-  </li>
-  <% }); %>
-</ul>
 
-<!-- Form to upload files to a folder -->
-<% folders.forEach(folder => { %>
-<form
-  action="/folders/upload/<%= folder.id %>"
-  method="POST"
-  enctype="multipart/form-data"
->
-  <input type="file" name="file" required />
-  <select name="folderId">
-    <option value="">No Folder</option>
-    <% folders.forEach(f => { %>
-    <option value="<%= f.id %>"><%= f.name %></option>
+    <!-- Form to upload files to a folder -->
+    <% folders.forEach(folder => { %>
+    <form
+      action="/folders/upload/<%= folder.id %>"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <input type="file" name="file" required />
+      <select name="folderId">
+        <option value="">No Folder</option>
+        <% folders.forEach(f => { %>
+        <option value="<%= f.id %>"><%= f.name %></option>
+        <% }); %>
+      </select>
+      <button type="submit">Upload File to <%= folder.name %></button>
+    </form>
     <% }); %>
-  </select>
-  <button type="submit">Upload File to <%= folder.name %></button>
-</form>
-<% }); %>
+  </body>
+</html>

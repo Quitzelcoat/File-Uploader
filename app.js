@@ -56,7 +56,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/uploads", express.static("uploads"));
 
 app.use(authRouter);
-app.use(uploadRoutes);
+app.use("/folders", uploadRoutes);
 app.use(folderRouter);
 
 const PORT = process.env.PORT || 3000;
