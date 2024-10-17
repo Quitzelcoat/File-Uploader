@@ -14,7 +14,7 @@ const { localStrategy, serialize, deserialize } = require("./config/passport");
 
 const app = express();
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({

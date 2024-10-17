@@ -4,15 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Details</title>
+    <link rel="stylesheet" href="/fileDetail.css" />
   </head>
   <body>
-    <h1>File Details</h1>
-    <p><strong>File Name:</strong> <%= file.originalname %></p>
-    <p><strong>File Size:</strong> <%= file.size %> bytes</p>
-    <p><strong>Upload Time:</strong> <%= file.uploadTime %></p>
-    <p><strong>File Type:</strong> <%= file.type %></p>
-    <p><strong>File Path:</strong> <%= file.path %></p>
+    <div class="file-details-container">
+      <h1>File Details</h1>
 
-    <a href="/">Back to Home</a>
+      <div class="file-detail-item">
+        <p><strong>File Name:</strong> <%= file.originalname %></p>
+      </div>
+
+      <div class="file-detail-item">
+        <p><strong>File Size:</strong> <%= file.size %> bytes</p>
+      </div>
+
+      <div class="file-detail-item">
+        <p><strong>Upload Time:</strong> <%= file.uploadTime %></p>
+      </div>
+
+      <div class="file-detail-item">
+        <p><strong>File Type:</strong> <%= file.type %></p>
+      </div>
+
+      <div class="file-detail-item">
+        <p><strong>File Path:</strong> <%= file.path %></p>
+      </div>
+
+      <div class="back-home-link">
+        <a href="/">Back to Home</a>
+      </div>
+    </div>
   </body>
 </html>

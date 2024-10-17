@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Folder: <%= folder.name %></title>
+    <link rel="stylesheet" href="/folderFiles.css" />
   </head>
   <body>
     <h1>Files in Folder: <%= folder.name %></h1>
@@ -26,6 +27,9 @@
     <p>No files found in this folder.</p>
     <% } %>
 
-    <a href="/">Back to Home</a>
+    <div class="backLinks">
+      <a href="/folders">Back to Folder</a>
+      <a href="/">Back to Home</a>
+    </div>
   </body>
 </html>
